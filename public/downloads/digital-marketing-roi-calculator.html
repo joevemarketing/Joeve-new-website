@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Marketing ROI Calculator (Offline)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; background:#f8fafc; color:#0f172a; margin:0; }
+    header { position:sticky; top:0; background:#fff; border-bottom:1px solid #e2e8f0; padding:12px 0; z-index:10; }
+    .container { max-width:1100px; margin:0 auto; padding:0 16px; }
+    h1 { font-size:20px; margin:0 0 0 8px; }
+    .badge { background:#4f46e5; color:#fff; border-radius:8px; padding:8px; display:inline-flex; align-items:center; }
+    .grid { display:grid; gap:16px; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; }
+    .kpi { display:flex; justify-content:space-between; align-items:start; margin-bottom:8px; }
+    .kpi h3 { font-size:22px; margin:8px 0; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px; border-bottom:1px solid #eef2f7; }
+    th { background:#f1f5f9; color:#334155; font-weight:600; text-align:left; }
+    td input { width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; }
+    .right { text-align:right; }
+    .btn { background:#4f46e5; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    .btn-outline { background:#fff; color:#4f46e5; border:1px solid #4f46e5; }
+    .row-actions { text-align:center; }
+    .muted { color:#64748b; font-size:12px; }
+    .good { color:#16a34a; }
+    .warn { color:#ca8a04; }
+    .bad { color:#dc2626; }
+    .footer { margin-top:24px; color:#64748b; font-size:12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="badge">ROI</div>
+        <h1>Growth ROI Calculator (Offline)</h1>
+      </div>
+      <button class="btn btn-outline" id="addChannelBtn">Add Channel</button>
+    </div>
+  </header>
+
+  <main class="container" style="padding:16px 0;">
+    <div class="card">
+      <h2 style="margin:0 0 12px 0;">Customer Lifetime Value (LTV) Basics</h2>
+      <div class="grid grid-4">
+        <div>
+          <div class="muted">Avg. Order Value (RM)</div>
+          <input type="number" id="aov" value="150" />
+        </div>
+        <div>
+          <div class="muted">Purchase Freq. / Year</div>
+          <input type="number" id="freq" value="4" />
+        </div>
+        <div>
+          <div class="muted">Customer Lifespan (Years)</div>
+          <input type="number" id="lifespan" value="3" />
+        </div>
+        <div>
+          <div class="muted">Gross Margin (%)</div>
+          <input type="number" id="margin" value="60" />
+        </div>
+      </div>
+      <div style="margin-top:10px;" class="muted">Estimated Profit LTV: <span id="ltvProfit" style="font-weight:700; color:#0f172a;">RM0</span></div>
+    </div>
+
+    <div class="grid" style="margin-top:16px;">
+      <div class="grid card grid-4">
+        <div>
+          <div class="muted">Total Spend</div>
+          <h3 id="kpiSpend">RM0</h3>
+        </div>
+        <div>
+          <div class="muted">Blended CAC</div>
+          <h3 id="kpiCAC">RM0</h3>
+          <div id="kpiCACSub" class="muted">Target: &lt; RM0</div>
+        </div>
+        <div>
+          <div class="muted">Total Revenue</div>
+          <h3 id="kpiRevenue">RM0</h3>
+          <div id="kpiROI" class="muted">0.0% ROI</div>
+        </div>
+        <div>
+          <div class="muted">Overall ROAS</div>
+          <h3 id="kpiROAS">0.00x</h3>
+          <div id="kpiROASSub" class="muted">Needs Optimization</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">Channel Data</h3>
+        <button class="btn btn-outline" id="resetBtn">Reset</button>
+      </div>
+      <div style="overflow-x:auto; margin-top:10px;">
+        <table id="channelsTable">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th class="right">Spend (RM)</th>
+              <th class="right">Impr.</th>
+              <th class="right">Clicks</th>
+              <th class="right">Leads</th>
+              <th class="right">Customers</th>
+              <th class="right">Revenue (RM)</th>
+              <th class="row-actions">Remove</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">Tip: Save this page and open it offline. Data stays in memory while the tab is open.</div>
+  </main>
+
+  <script>
+    const fmtRM = (v) => new Intl.NumberFormat('en-MY', { style:'currency', currency:'MYR', maximumFractionDigits:0 }).format(v || 0);
+    const fmtX = (v) => `${(v || 0).toFixed(2)}x`;
+    const fmtPct = (v) => `${(v || 0).toFixed(1)}%`;
+
+    const state = {
+      ltv: { aov:150, freq:4, lifespan:3, margin:60 },
+      channels: [
+        { id:1, name:'Google Ads (Search)', spend:5000, impressions:25000, clicks:1200, leads:150, customers:45, revenue:12000 },
+        { id:2, name:'Facebook/IG Ads', spend:3500, impressions:45000, clicks:800, leads:90, customers:20, revenue:4500 },
+        { id:3, name:'LinkedIn Sponsored', spend:2000, impressions:8000, clicks:150, leads:40, customers:5, revenue:3000 },
+        { id:4, name:'Email Marketing', spend:500, impressions:10000, clicks:2000, leads:500, customers:80, revenue:8000 },
+      ],
+    };
+
+    const els = {
+      aov: document.getElementById('aov'),
+      freq: document.getElementById('freq'),
+      lifespan: document.getElementById('lifespan'),
+      margin: document.getElementById('margin'),
+      ltvProfit: document.getElementById('ltvProfit'),
+      kpiSpend: document.getElementById('kpiSpend'),
+      kpiCAC: document.getElementById('kpiCAC'),
+      kpiCACSub: document.getElementById('kpiCACSub'),
+      kpiRevenue: document.getElementById('kpiRevenue'),
+      kpiROI: document.getElementById('kpiROI'),
+      kpiROAS: document.getElementById('kpiROAS'),
+      kpiROASSub: document.getElementById('kpiROASSub'),
+      tableBody: document.querySelector('#channelsTable tbody'),
+      addBtn: document.getElementById('addChannelBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+    };
+
+    function calcLTVProfit() {
+      const raw = state.ltv.aov * state.ltv.freq * state.ltv.lifespan;
+      const profit = raw * (state.ltv.margin / 100);
+      els.ltvProfit.textContent = fmtRM(profit);
+      els.kpiCACSub.textContent = `Target: < ${fmtRM(profit / 3)}`;
+      return { raw, profit };
+    }
+
+    function renderTable() {
+      els.tableBody.innerHTML = '';
+      state.channels.forEach((ch) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" value="${ch.name}" data-id="${ch.id}" data-field="name" /></td>
+          <td class="right"><input type="number" value="${ch.spend}" data-id="${ch.id}" data-field="spend" /></td>
+          <td class="right"><input type="number" value="${ch.impressions}" data-id="${ch.id}" data-field="impressions" /></td>
+          <td class="right"><input type="number" value="${ch.clicks}" data-id="${ch.id}" data-field="clicks" /></td>
+          <td class="right"><input type="number" value="${ch.leads}" data-id="${ch.id}" data-field="leads" /></td>
+          <td class="right"><input type="number" value="${ch.customers}" data-id="${ch.id}" data-field="customers" /></td>
+          <td class="right"><input type="number" value="${ch.revenue}" data-id="${ch.id}" data-field="revenue" /></td>
+          <td class="row-actions"><button class="btn btn-outline" data-remove="${ch.id}">Remove</button></td>
+        `;
+        els.tableBody.appendChild(tr);
+      });
+    }
+
+    function analyze() {
+      const ltv = calcLTVProfit();
+      const totals = state.channels.reduce((acc, c) => {
+        acc.spend += c.spend; acc.revenue += c.revenue; acc.customers += c.customers; return acc;
+      }, { spend:0, revenue:0, customers:0 });
+
+      const blendedCAC = totals.customers > 0 ? totals.spend / totals.customers : 0;
+      const totalROI = totals.spend > 0 ? ((totals.revenue - totals.spend) / totals.spend) * 100 : 0;
+      const totalROAS = totals.spend > 0 ? totals.revenue / totals.spend : 0;
+
+      els.kpiSpend.textContent = fmtRM(totals.spend);
+      els.kpiCAC.textContent = fmtRM(blendedCAC);
+      els.kpiRevenue.textContent = fmtRM(totals.revenue);
+      els.kpiROI.textContent = `${fmtPct(totalROI)} ROI`;
+      els.kpiROAS.textContent = fmtX(totalROAS);
+      els.kpiROASSub.textContent = totalROAS > 4 ? 'Excellent Efficiency' : 'Needs Optimization';
+    }
+
+    function onInput(e) {
+      const t = e.target;
+      if (t.matches('#aov, #freq, #lifespan, #margin')) {
+        const id = t.id;
+        const val = parseFloat(t.value) || 0;
+        if (id === 'aov') state.ltv.aov = val;
+        if (id === 'freq') state.ltv.freq = val;
+        if (id === 'lifespan') state.ltv.lifespan = val;
+        if (id === 'margin') state.ltv.margin = val;
+      }
+      if (t.dataset && t.dataset.field) {
+        const id = parseInt(t.dataset.id, 10);
+        const field = t.dataset.field;
+        const ch = state.channels.find((c) => c.id === id);
+        if (ch) ch[field] = field === 'name' ? t.value : (parseFloat(t.value) || 0);
+      }
+      analyze();
+    }
+
+    function addChannel() {
+      const newId = Math.max(0, ...state.channels.map(c => c.id)) + 1;
+      state.channels.push({ id:newId, name:'New Channel', spend:0, impressions:0, clicks:0, leads:0, customers:0, revenue:0 });
+      renderTable();
+      analyze();
+    }
+
+    function removeChannel(id) {
+      state.channels = state.channels.filter((c) => c.id !== id);
+      renderTable();
+      analyze();
+    }
+
+    function reset() {
+      state.channels = [
+        { id:1, name:'Google Ads (Search)', spend:5000, impressions:25000, clicks:1200, leads:150, customers:45, revenue:12000 },
+        { id:2, name:'Facebook/IG Ads', spend:3500, impressions:45000, clicks:800, leads:90, customers:20, revenue:4500 },
+        { id:3, name:'LinkedIn Sponsored', spend:2000, impressions:8000, clicks:150, leads:40, customers:5, revenue:3000 },
+        { id:4, name:'Email Marketing', spend:500, impressions:10000, clicks:2000, leads:500, customers:80, revenue:8000 },
+      ];
+      renderTable();
+      analyze();
+    }
+
+    document.addEventListener('input', onInput);
+    document.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t.matches('[data-remove]')) removeChannel(parseInt(t.getAttribute('data-remove'), 10));
+    });
+    els.addBtn.addEventListener('click', addChannel);
+    els.resetBtn.addEventListener('click', reset);
+
+    // Init
+    els.aov.addEventListener('change', onInput);
+    els.freq.addEventListener('change', onInput);
+    els.lifespan.addEventListener('change', onInput);
+    els.margin.addEventListener('change', onInput);
+    renderTable();
+    analyze();
+  </script>
+</body>
+</html>

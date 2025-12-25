@@ -1,0 +1,13 @@
+AI Transformation Guide (Overview)
+
+Contents
+- Strategy: prioritize AI by business outcomes
+- Use-cases: automation, content, analytics
+- ROI: measure impact with clear baselines
+- Implementation: phases, risks, governance
+
+Getting Started
+1. Identify one process with clear measurable pain
+2. Prototype quickly, validate with real users
+3. Instrument metrics, iterate based on data
+4. Scale with training, SOPs, and support

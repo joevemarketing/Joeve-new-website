@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Transformation Checklist</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#0B1220; color:#E5EAFF; margin:0; }
+    .container { max-width:900px; margin:0 auto; padding:24px; }
+    .card { background:#121A2C; border:1px solid #1F2A44; border-radius:12px; padding:16px; margin-bottom:16px; }
+    h1 { font-size:28px; margin:0 0 12px 0; }
+    h2 { font-size:18px; margin:0 0 8px 0; color:#8CD1FF; }
+    label { display:flex; align-items:center; gap:8px; padding:6px 0; }
+    input[type=checkbox] { width:18px; height:18px; }
+    .muted { color:#9EB4D3; font-size:14px; }
+  </style>
+  <script>
+    function toggle(e){ e.parentElement.style.opacity = e.checked ? 0.6 : 1; }
+  </script>
+</head>
+<body>
+  <main class="container">
+    <h1>AI Transformation Checklist (90 Days)</h1>
+
+    <div class="card">
+      <h2>Phase 1: Discovery (Weeks 1–2)</h2>
+      <label><input type="checkbox" onchange="toggle(this)" /> Map processes ripe for automation</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Audit data sources and access</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Define success metrics and guardrails</label>
+      <div class="muted">Output: discovery brief, data audit, KPI baseline</div>
+    </div>
+
+    <div class="card">
+      <h2>Phase 2: Pilot (Weeks 3–6)</h2>
+      <label><input type="checkbox" onchange="toggle(this)" /> Prioritize 2–3 high-impact use-cases</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Build rapid prototypes and validate</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Set up logging and monitoring</label>
+      <div class="muted">Output: working pilot, validation notes, monitoring</div>
+    </div>
+
+    <div class="card">
+      <h2>Phase 3: Rollout (Weeks 7–10)</h2>
+      <label><input type="checkbox" onchange="toggle(this)" /> Harden solution, add auth and roles</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Train staff and document SOPs</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Measure ROI against baseline</label>
+      <div class="muted">Output: production deployment, SOPs, ROI report</div>
+    </div>
+
+    <div class="card">
+      <h2>Phase 4: Optimize (Weeks 11–13)</h2>
+      <label><input type="checkbox" onchange="toggle(this)" /> Iterate on UX and performance</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Expand to adjacent processes</label>
+      <label><input type="checkbox" onchange="toggle(this)" /> Plan continuous improvement cadence</label>
+      <div class="muted">Output: optimization backlog and roadmap</div>
+    </div>
+  </main>
+</body>
+</html>

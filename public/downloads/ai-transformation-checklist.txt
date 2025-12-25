@@ -1,0 +1,21 @@
+AI Transformation Checklist (90 Days)
+
+Phase 1: Discovery (Weeks 1–2)
+- Map processes ripe for automation
+- Audit data sources and access
+- Define success metrics and guardrails
+
+Phase 2: Pilot (Weeks 3–6)
+- Prioritize 2–3 high-impact use-cases
+- Build rapid prototypes and validate
+- Set up logging and monitoring
+
+Phase 3: Rollout (Weeks 7–10)
+- Harden solution, add auth and roles
+- Train staff and document SOPs
+- Measure ROI against baseline
+
+Phase 4: Optimize (Weeks 11–13)
+- Iterate on UX and performance
+- Expand to adjacent processes
+- Plan continuous improvement cadence

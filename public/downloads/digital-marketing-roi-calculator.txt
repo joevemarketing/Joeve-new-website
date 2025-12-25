@@ -1,0 +1,17 @@
+Digital Marketing ROI Worksheet
+
+Inputs per channel:
+- Spend (RM): ____
+- Leads: ____
+- Conversions: ____
+- Revenue (RM): ____
+
+Derived metrics:
+- Conversion Rate = Conversions / Leads
+- CAC = Spend / Conversions
+- ROAS = Revenue / Spend
+- Payback Period = CAC / (Avg. monthly profit per customer)
+
+Notes:
+- Include attribution window and assisted conversions
+- Track LTV by cohort when possible

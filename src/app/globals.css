@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-black text-white overflow-x-hidden;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Basic color utilities */
+.bg-joeve-blue-deep {
+  background-color: rgb(2, 6, 23);
+}
+
+.bg-joeve-blue-dark {
+  background-color: rgb(3, 7, 30);
+}
+
+.text-cyan-400 {
+  color: rgb(34, 211, 238);
+}
+
+.border-cyan-400 {
+  border-color: rgb(34, 211, 238);
+}
+
+/* Basic color utilities */
+.bg-joeve-blue-deep {
+  background-color: rgb(2, 6, 23);
+}
+
+.bg-joeve-blue-dark {
+  background-color: rgb(3, 7, 30);
+}
+
+.text-cyan-400 {
+  color: rgb(34, 211, 238);
+}
+
+.border-cyan-400 {
+  border-color: rgb(34, 211, 238);
+}

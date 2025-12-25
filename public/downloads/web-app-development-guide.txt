@@ -1,0 +1,21 @@
+Web App Development Guide (Starter)
+
+1) Problem & Users
+- Who are the primary users?
+- What jobs-to-be-done are critical?
+
+2) Scope & Features
+- Must-haves (MVP): ____
+- Nice-to-haves: ____
+
+3) Architecture
+- Auth: roles, sessions
+- Data model: entities and relations
+- Integrations: payments, email, storage
+
+4) Delivery Plan
+- Milestones & timelines
+- Acceptance criteria & demos
+
+5) Success Metrics
+- Adoption, retention, productivity gains, ROI
