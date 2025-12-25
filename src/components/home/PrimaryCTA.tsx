@@ -124,16 +124,7 @@ export default function PrimaryCTA() {
                 <ArrowRight className="ml-2 w-6 h-6" />
               </Link>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/40 text-white hover:bg-white/10 px-10 py-7 rounded-full text-xl font-semibold backdrop-blur-sm"
-              asChild
-            >
-              <Link href="/tools">
-                Try Our Free Tools
-              </Link>
-            </Button>
+
           </motion.div>
 
           {/* Trust Indicators */}

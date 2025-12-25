@@ -1,482 +1,458 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { FileText, Code, DollarSign, Users, Clock, Mail, CheckCircle, Target, Zap } from "lucide-react";
-import { ScrollReveal } from "@/components/effects/ScrollAnimations";
+import { FileText, Code, DollarSign, Users, Clock, Mail, CheckCircle, Target, Zap, Settings, Download } from "lucide-react";
 
-interface SurveyData {
-  projectScope: string;
-  budgetRange: string;
-  timelineUrgency: string;
-  technicalRequirements: string[];
-  teamSize: string;
-  email: string;
+interface ProjectData {
+  appType: string;
+  complexity: string;
+  framework: string;
+  description: string;
+  features: string[];
 }
 
-interface DevelopmentRecommendations {
-  technologyStack: string[];
-  estimatedTimeline: string;
-  teamSize: string;
-  budgetEstimate: string;
-  riskLevel: string;
-  recommendedApproach: string;
-}
-
-interface QuestionOption {
-  value: string;
-  label: string;
-  complexity?: number;
-  budget?: number;
-  urgency?: number;
-  size?: number;
-}
-
-interface Question {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  type?: string;
-  placeholder?: string;
-  options?: QuestionOption[];
-  multiSelect?: boolean;
+interface TechStack {
+  frontend: string;
+  framework: string;
+  styling: string;
+  state: string;
 }
 
 export default function WebAppGuide() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [surveyData, setSurveyData] = useState<SurveyData>({
-    projectScope: "",
-    budgetRange: "",
-    timelineUrgency: "",
-    technicalRequirements: [],
-    teamSize: "",
-    email: ""
+  const [projectData, setProjectData] = useState<ProjectData>({
+    appType: "",
+    complexity: "",
+    framework: "",
+    description: "",
+    features: []
   });
-  const [recommendations, setRecommendations] = useState<DevelopmentRecommendations | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [plan, setPlan] = useState<any>(null);
+  const [loadingStep, setLoadingStep] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
 
-  const totalSteps = 5;
+  const techStacks: { [key: string]: TechStack } = {
+    react: { frontend: "React", framework: "Next.js", styling: "Tailwind CSS", state: "Zustand/Redux" },
+    vue: { frontend: "Vue", framework: "Nuxt", styling: "Tailwind CSS / Vuetify", state: "Pinia" },
+    angular: { frontend: "Angular", framework: "Angular Universal", styling: "Angular Material", state: "NgRx" },
+    svelte: { frontend: "Svelte", framework: "SvelteKit", styling: "Tailwind CSS", state: "Svelte Stores" },
+    vanilla: { frontend: "Vanilla JS", framework: "Vite (Build Tool)", styling: "CSS Variables", state: "Custom State Pattern" },
+    suggest: { frontend: "To be decided", framework: "Based on complexity", styling: "CSS Modules", state: "Context API" }
+  };
 
-  const questions: Question[] = [
-    {
-      id: "projectScope",
-      title: "Project Scope",
-      subtitle: "What's the complexity of your web application?",
-      icon: <Target className="w-6 h-6" />,
-      options: [
-        { value: "simple", label: "Simple Website (Landing pages, basic forms)", complexity: 1 },
-        { value: "moderate", label: "Business Application (CRM, Dashboard, E-commerce)", complexity: 2 },
-        { value: "complex", label: "Enterprise Solution (Multi-tenant, API integrations)", complexity: 3 },
-        { value: "innovative", label: "Innovative Platform (AI/ML, Real-time features)", complexity: 4 }
-      ]
-    },
-    {
-      id: "budgetRange",
-      title: "Budget Range",
-      subtitle: "What's your estimated budget for this project?",
-      icon: <DollarSign className="w-6 h-6" />,
-      options: [
-        { value: "10-25k", label: "RM 10,000 - RM 25,000", budget: 1 },
-        { value: "25-50k", label: "RM 25,000 - RM 50,000", budget: 2 },
-        { value: "50-100k", label: "RM 50,000 - RM 100,000", budget: 3 },
-        { value: "100k+", label: "RM 100,000+", budget: 4 }
-      ]
-    },
-    {
-      id: "timelineUrgency",
-      title: "Timeline Urgency",
-      subtitle: "When do you need this project completed?",
-      icon: <Clock className="w-6 h-6" />,
-      options: [
-        { value: "urgent", label: "Urgent (1-2 months)", urgency: 4 },
-        { value: "standard", label: "Standard (3-6 months)", urgency: 2 },
-        { value: "flexible", label: "Flexible (6-12 months)", urgency: 1 }
-      ]
-    },
-    {
-      id: "technicalRequirements",
-      title: "Technical Requirements",
-      subtitle: "Select the technologies/features you need (multiple selections allowed)",
-      icon: <Code className="w-6 h-6" />,
-      multiSelect: true,
-      options: [
-        { value: "responsive", label: "Responsive Design" },
-        { value: "authentication", label: "User Authentication" },
-        { value: "database", label: "Database Integration" },
-        { value: "api", label: "API Development" },
-        { value: "payment", label: "Payment Processing" },
-        { value: "realtime", label: "Real-time Features" },
-        { value: "mobile", label: "Mobile App Integration" },
-        { value: "ai", label: "AI/ML Features" },
-        { value: "analytics", label: "Analytics Dashboard" },
-        { value: "cms", label: "Content Management System" }
-      ]
-    },
-    {
-      id: "teamSize",
-      title: "Team Size",
-      subtitle: "How many developers will be working on this project?",
-      icon: <Users className="w-6 h-6" />,
-      options: [
-        { value: "solo", label: "Solo Developer", size: 1 },
-        { value: "small", label: "Small Team (2-3 developers)", size: 2 },
-        { value: "medium", label: "Medium Team (4-6 developers)", size: 3 },
-        { value: "large", label: "Large Team (7+ developers)", size: 4 }
-      ]
-    }
+  const complexStrategies: { [key: string]: string } = {
+    mvp: "Focus on speed to market. Use managed services (Firebase/Supabase) to reduce backend overhead. Avoid over-engineering.",
+    growth: "Implement separation of concerns. Build a modular monolith or microservices backend. Use CI/CD pipelines from day one.",
+    enterprise: "Prioritize security (OAuth2, RBAC), scalability (Load Balancing, Caching), and maintainability. Document all APIs."
+  };
+
+  const appTypes = [
+    { value: "landing", label: "Landing Page / Marketing" },
+    { value: "dashboard", label: "Admin Dashboard / SaaS" },
+    { value: "ecommerce", label: "E-Commerce Store" },
+    { value: "social", label: "Social Network / Community" },
+    { value: "portfolio", label: "Portfolio / Blog" }
   ];
 
-  const generateRecommendations = (data: SurveyData): DevelopmentRecommendations => {
-    const projectQuestion = questions[0];
-    const budgetQuestion = questions[1];
-    const timelineQuestion = questions[2];
-    const teamQuestion = questions[4];
+  const complexities = [
+    { value: "mvp", label: "MVP (Minimum Viable Product)" },
+    { value: "growth", label: "Growth Stage (Scalable)" },
+    { value: "enterprise", label: "Enterprise (High Security/Load)" }
+  ];
+
+  const frameworks = [
+    { value: "suggest", label: "Suggest based on needs" },
+    { value: "react", label: "React / Next.js" },
+    { value: "vue", label: "Vue / Nuxt" },
+    { value: "angular", label: "Angular" },
+    { value: "svelte", label: "Svelte / SvelteKit" },
+    { value: "vanilla", label: "Vanilla HTML/JS" }
+  ];
+
+  const features = [
+    { id: "auth", label: "Auth & Users", icon: "🔐" },
+    { id: "database", label: "Database", icon: "🗄️" },
+    { id: "payments", label: "Payments", icon: "💳" },
+    { id: "api", label: "3rd Party API", icon: "🔗" },
+    { id: "realtime", label: "Real-time", icon: "⚡" },
+    { id: "cms", label: "CMS / Blog", icon: "📝" }
+  ];
+
+  const handleInputChange = (field: keyof ProjectData, value: string | string[]) => {
+    setProjectData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFeatureToggle = (feature: string) => {
+    setProjectData(prev => {
+      const newFeatures = prev.features.includes(feature)
+        ? prev.features.filter(f => f !== feature)
+        : [...prev.features, feature];
+      return { ...prev, features: newFeatures };
+    });
+  };
+
+  const generatePlan = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    const complexity = projectQuestion.options?.find(opt => opt.value === data.projectScope)?.complexity || 2;
-    const budget = budgetQuestion.options?.find(opt => opt.value === data.budgetRange)?.budget || 2;
-    const urgency = timelineQuestion.options?.find(opt => opt.value === data.timelineUrgency)?.urgency || 2;
-    const teamSize = teamQuestion.options?.find(opt => opt.value === data.teamSize)?.size || 2;
-    const techCount = data.technicalRequirements.length;
-
-    // Technology Stack Recommendations
-    const techStack = [];
-    if (complexity <= 2) {
-      techStack.push("React.js", "Node.js", "PostgreSQL");
-    } else if (complexity <= 3) {
-      techStack.push("Next.js", "TypeScript", "PostgreSQL", "Redis");
-    } else {
-      techStack.push("Next.js", "TypeScript", "PostgreSQL", "Redis", "Docker", "Kubernetes");
-    }
-
-    if (techCount > 5) {
-      techStack.push("Microservices Architecture", "API Gateway");
-    }
-
-    // Timeline Estimation
-    let timeline = "3-6 months";
-    if (urgency === 4) timeline = "1-2 months";
-    else if (urgency === 1) timeline = "6-12 months";
-
-    // Budget Estimation
-    let budgetEstimate = "RM 25,000 - RM 50,000";
-    if (budget === 1) budgetEstimate = "RM 10,000 - RM 25,000";
-    else if (budget === 3) budgetEstimate = "RM 50,000 - RM 100,000";
-    else if (budget === 4) budgetEstimate = "RM 100,000+";
-
-    // Risk Assessment
-    let riskLevel = "Low";
-    if (complexity >= 3 && urgency >= 3) riskLevel = "High";
-    else if (complexity >= 2 || urgency >= 3) riskLevel = "Medium";
-
-    // Recommended Approach
-    let approach = "Agile Development";
-    if (urgency === 4) approach = "Rapid Prototyping + Agile";
-    else if (complexity >= 3) approach = "Scaled Agile Framework (SAFe)";
-
-    return {
-      technologyStack: techStack,
-      estimatedTimeline: timeline,
-      teamSize: data.teamSize,
-      budgetEstimate: budgetEstimate,
-      riskLevel: riskLevel,
-      recommendedApproach: approach
-    };
-  };
-
-  const handleNext = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      // Generate recommendations
-      const results = generateRecommendations(surveyData);
-      setRecommendations(results);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!surveyData.email || !recommendations) {
-      alert('Please complete all steps and provide your email address.');
+    if (!projectData.appType || !projectData.complexity) {
+      alert("Please select application type and complexity");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      // Submit survey data to API
-      const response = await fetch('/api/submit-dev-survey', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...surveyData,
-          recommendations,
-          survey_type: 'web_app_guide'
-        }),
-      });
+    setIsGenerating(true);
+    setPlan(null);
+    setIsComplete(false);
 
-      if (response.ok) {
-        setIsSubmitted(true);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Submission failed');
+    const steps = [
+      "Parsing project requirements...",
+      "Consulting architectural patterns...",
+      "Calculating optimal tech stack...",
+      "Compiling strategy roadmap...",
+      "Finalizing plan..."
+    ];
+
+    let stepIndex = 0;
+    const interval = setInterval(() => {
+      if (stepIndex < steps.length) {
+        setLoadingStep(steps[stepIndex]);
+        stepIndex++;
       }
-    } catch (error) {
-      console.error('Error submitting survey:', error);
-      alert(error instanceof Error ? error.message : 'There was an error submitting your survey. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    }, 500);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      
+      // Generate plan
+      let stackKey = projectData.framework;
+      if (stackKey === "suggest") {
+        if (projectData.appType === "dashboard" || projectData.appType === "ecommerce") stackKey = "react";
+        else if (projectData.appType === "portfolio") stackKey = "svelte";
+        else stackKey = "vanilla";
+      }
+
+      const selectedStack = techStacks[stackKey];
+      const baseStrategy = complexStrategies[projectData.complexity];
+      
+      let strategyPoints = [baseStrategy];
+      
+      if (projectData.features.includes("realtime")) {
+        strategyPoints.push("Implement WebSockets (Socket.io) or Server-Sent Events for live updates.");
+      }
+      if (projectData.features.includes("payments")) {
+        strategyPoints.push("Integrate Stripe or PayPal SDK with webhooks for secure transaction handling.");
+      }
+      if (projectData.features.includes("auth")) {
+        strategyPoints.push("Use NextAuth.js or Firebase Auth for JWT-based session management.");
+      }
+
+      const archItems = [
+        `Pattern: ${projectData.complexity === "enterprise" ? "Microservices Architecture" : "Monolithic Architecture"}`,
+        `Deployment: ${projectData.complexity === "mvp" ? "Serverless/Edge Functions (Vercel/Netlify)" : "Containerized (Docker/K8s)"}`,
+        `Data Structure: ${projectData.features.includes("database") ? "Relational (PostgreSQL) or NoSQL (MongoDB) depending on data consistency needs" : "Stateless primarily, possible LocalStorage usage"}`
+      ];
+
+      const stackItems = [
+        `Frontend Library: ${selectedStack.frontend}`,
+        `Framework/Runner: ${selectedStack.framework}`,
+        `Styling: ${selectedStack.styling}`,
+        `State Management: ${selectedStack.state}`
+      ];
+
+      const newPlan = {
+        date: new Date().toLocaleDateString(),
+        type: projectData.appType.charAt(0).toUpperCase() + projectData.appType.slice(1),
+        complexity: projectData.complexity.charAt(0).toUpperCase() + projectData.complexity.slice(1),
+        archItems,
+        stackItems,
+        strategyPoints
+      };
+
+      setPlan(newPlan);
+      setIsGenerating(false);
+      setIsComplete(true);
+    }, 2500);
   };
 
-  const updateSurveyData = (field: keyof SurveyData, value: string | string[]) => {
-    setSurveyData(prev => ({ ...prev, [field]: value }));
+  const downloadPDF = () => {
+    if (!plan) return;
+
+    const pdfContent = `WEB APP DEVELOPMENT PLAN
+========================
+
+Project Configuration
+--------------------
+Date: ${plan.date}
+Type: ${plan.type}
+Complexity: ${plan.complexity}
+${projectData.description ? `Description: ${projectData.description}` : ''}
+${projectData.features.length > 0 ? `Features: ${projectData.features.join(', ')}` : ''}
+
+Architecture Overview
+------------------
+${plan.archItems.map((item: string) => `• ${item}`).join('\n')}
+
+Recommended Tech Stack
+--------------------
+${plan.stackItems.map((item: string) => `• ${item}`).join('\n')}
+
+Development Strategy
+--------------------
+${plan.strategyPoints.map((item: string) => `• ${item}`).join('\n')}
+
+Next Steps
+----------
+1. Set up development environment
+2. Initialize project structure
+3. Implement core functionality
+4. Add authentication and security
+5. Deploy and test
+
+Generated by JOeve Smart Solutions
+${new Date().getFullYear()} - All rights reserved`;
+
+    const blob = new Blob([pdfContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'web-app-development-plan.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
-
-  const toggleTechnicalRequirement = (requirement: string) => {
-    const current = surveyData.technicalRequirements;
-    if (current.includes(requirement)) {
-      updateSurveyData('technicalRequirements', current.filter(r => r !== requirement));
-    } else {
-      updateSurveyData('technicalRequirements', [...current, requirement]);
-    }
-  };
-
-  const currentQuestion = questions[currentStep - 1];
-
-  if (isSubmitted) {
-    return (
-      <main className="flex min-h-screen flex-col bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep">
-        <div className="container mx-auto px-4 py-20">
-          <ScrollReveal className="max-w-2xl mx-auto text-center">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-white mb-4">Development Guide Generated!</h2>
-              <p className="text-gray-300 mb-6">
-                Thank you for completing our assessment. Your personalized development guide has been sent to {surveyData.email}.
-              </p>
-              <p className="text-gray-400 mb-8">
-                Check your email for the download link. The guide includes technology stack recommendations, timeline estimates, and implementation roadmap.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-6 py-3 rounded-full" asChild>
-                  <a href="/tools/download-center">Access Download Center</a>
-                </Button>
-                <Button variant="outline" className="border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white font-bold px-6 py-3 rounded-full" asChild>
-                  <Link href="/tools">Back to Tools</Link>
-                </Button>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </main>
-    );
-  }
 
   return (
-    <main className="flex min-h-screen flex-col bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
+    <main className="min-h-screen bg-black text-white">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Header */}
+        <div>
           <div className="text-center mb-8">
-            <FileText className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Web App Development Guide</h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Get personalized recommendations for your web application development project based on your specific needs
-            </p>
+            <FileText className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
+            <h1 className="text-4xl font-bold text-white mb-2">Web App Development Guide</h1>
+            <p className="text-lg text-gray-300">Generate a professional technical roadmap for your next project</p>
           </div>
+        </div>
 
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-400">Step {currentStep} of {totalSteps}</span>
-              <span className="text-sm text-gray-400">{Math.round((currentStep / totalSteps) * 100)}%</span>
-            </div>
-            <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
-          </div>
-
-          {/* Survey Content */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                {currentQuestion.icon}
-                <CardTitle className="text-xl text-white">{currentQuestion.title}</CardTitle>
-              </div>
-              <CardDescription className="text-gray-300">
-                {currentQuestion.subtitle}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {currentQuestion.multiSelect ? (
-                <div className="space-y-3">
-                  {currentQuestion.options?.map((option) => (
-                    <div key={option.value} className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id={option.value}
-                        checked={surveyData.technicalRequirements.includes(option.value)}
-                        onChange={() => toggleTechnicalRequirement(option.value)}
-                        className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
-                      />
-                      <Label htmlFor={option.value} className="text-white cursor-pointer">
-                        {option.label}
-                      </Label>
-                    </div>
-                  ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Configuration Form */}
+          <div>
+            <div className="bg-black/40 backdrop-blur-md border border-gray-800 shadow-2xl">
+              <div className="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-b border-gray-700 p-6">
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <Settings className="w-5 h-5" />
+                  Configuration
                 </div>
-              ) : currentQuestion.options ? (
-                <RadioGroup
-                  value={surveyData[currentQuestion.id as keyof SurveyData] as string}
-                  onValueChange={(value) => updateSurveyData(currentQuestion.id as keyof SurveyData, value)}
-                  className="space-y-3"
-                >
-                  {currentQuestion.options.map((option) => (
-                    <div key={option.value} className="flex items-center space-x-3">
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value} className="text-white cursor-pointer">
-                        {option.label}
-                      </Label>
+              </div>
+              <div className="p-6">
+                <form onSubmit={generatePlan} className="space-y-6">
+                  {/* Application Type */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-200 mb-2">Application Type</label>
+                    <select
+                      value={projectData.appType}
+                      onChange={(e) => handleInputChange("appType", e.target.value)}
+                      className="w-full px-4 py-2 bg-black/60 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white"
+                      required
+                    >
+                      <option value="" disabled>Select type...</option>
+                      {appTypes.map((type) => (
+                        <option key={type.value} value={type.value} className="bg-gray-900">{type.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Complexity */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-200 mb-2">Scale & Complexity</label>
+                    <select
+                      value={projectData.complexity}
+                      onChange={(e) => handleInputChange("complexity", e.target.value)}
+                      className="w-full px-4 py-2 bg-black/60 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white"
+                      required
+                    >
+                      {complexities.map((complexity) => (
+                        <option key={complexity.value} value={complexity.value} className="bg-gray-900">{complexity.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Features */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-200 mb-2">Core Features</label>
+                    <span className="text-xs text-gray-400 mb-3 block">Select all that apply</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {features.map((feature) => (
+                        <label key={feature.id} className="relative">
+                          <input
+                            type="checkbox"
+                            checked={projectData.features.includes(feature.id)}
+                            onChange={() => handleFeatureToggle(feature.id)}
+                            className="sr-only"
+                          />
+                          <div className={`flex flex-col items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                            projectData.features.includes(feature.id)
+                              ? "border-cyan-500 bg-cyan-500/20 text-cyan-300 font-semibold"
+                              : "border-gray-600 text-gray-400 hover:border-gray-500 hover:bg-gray-500/10"
+                          }`}>
+                            <span className="text-xl mb-1">{feature.icon}</span>
+                            <span className="text-xs text-center">{feature.label}</span>
+                          </div>
+                        </label>
+                      ))}
                     </div>
-                  ))}
-                </RadioGroup>
-              ) : (
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Input
-                      type={currentQuestion.type || "text"}
-                      placeholder={currentQuestion.placeholder}
-                      value={surveyData[currentQuestion.id as keyof SurveyData] as string}
-                      onChange={(e) => updateSurveyData(currentQuestion.id as keyof SurveyData, e.target.value)}
-                      className="bg-white/5 border-white/20 text-white placeholder-gray-400"
+                  </div>
+
+                  {/* Framework */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-200 mb-2">Preferred Tech Stack (Optional)</label>
+                    <select
+                      value={projectData.framework}
+                      onChange={(e) => handleInputChange("framework", e.target.value)}
+                      className="w-full px-4 py-2 bg-black/60 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white"
+                    >
+                      {frameworks.map((framework) => (
+                        <option key={framework.value} value={framework.value} className="bg-gray-900">{framework.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-200 mb-2">Project Description</label>
+                    <textarea
+                      value={projectData.description}
+                      onChange={(e) => handleInputChange("description", e.target.value)}
+                      placeholder="Briefly describe the main goal of your application..."
+                      rows={4}
+                      className="w-full px-4 py-2 bg-black/60 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white placeholder-gray-500 resize-none"
                     />
                   </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
 
-          {/* Navigation */}
-          <div className="flex justify-between items-center mt-8">
-            <Button
-              onClick={handlePrevious}
-              disabled={currentStep === 1}
-              variant="outline"
-              className="border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white font-bold px-6 py-3 rounded-full"
-            >
-              Previous
-            </Button>
-
-            {currentStep < totalSteps ? (
-              <Button
-                onClick={handleNext}
-                disabled={!surveyData[currentQuestion.id as keyof SurveyData] || (currentQuestion.id === 'technicalRequirements' && surveyData.technicalRequirements.length === 0)}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
-              >
-                Next
-              </Button>
-            ) : (
-              <Button
-                onClick={() => setCurrentStep(currentStep + 1)}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
-              >
-                Generate Guide
-              </Button>
-            )}
+                  <button
+                    type="submit"
+                    disabled={isGenerating}
+                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-5 h-5" />
+                        Generate Development Plan
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
 
-          {/* Recommendations */}
-          {recommendations && currentStep > totalSteps && (
-            <ScrollReveal className="mt-8">
-              <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-white flex items-center gap-2">
-                    <Zap className="w-6 h-6 text-green-400" />
-                    Your Development Recommendations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+          {/* Results Section */}
+          <div>
+            <div className="bg-black/40 backdrop-blur-md border border-gray-800 shadow-2xl">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border-b border-gray-700 p-6">
+                <div className="flex items-center gap-2 text-emerald-400">
+                  <Target className="w-5 h-5" />
+                  Your Development Roadmap
+                </div>
+              </div>
+              
+              <div className="p-6">
+                {/* Placeholder State */}
+                {!isGenerating && !plan && (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <FileText className="w-16 h-16 text-gray-400 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-300 mb-2">Ready to Plan</h3>
+                    <p className="text-gray-500">Configure your project details to generate a comprehensive architecture and strategy plan</p>
+                  </div>
+                )}
+
+                {/* Loading State */}
+                {isGenerating && (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <div className="w-10 h-10 border-4 border-gray-600 border-t-gray-400 rounded-full animate-spin mb-4"></div>
+                    <h3 className="text-xl font-semibold text-cyan-400 mb-2">Calculating Requirements...</h3>
+                    <p className="text-sm text-gray-400">{loadingStep}</p>
+                  </div>
+                )}
+
+                {/* Results State */}
+                {plan && isComplete && (
                   <div className="space-y-6">
-                    {/* Technology Stack */}
+                    {/* Metadata */}
+                    <div className="bg-cyan-500/10 p-4 rounded-lg border border-cyan-500/30 grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <span className="font-semibold text-cyan-300">Date:</span>
+                        <div className="text-white">{plan.date}</div>
+                      </div>
+                      <div>
+                        <span className="font-semibold text-cyan-300">Type:</span>
+                        <div className="text-white">{plan.type}</div>
+                      </div>
+                      <div>
+                        <span className="font-semibold text-cyan-300">Complexity:</span>
+                        <div className="text-white">{plan.complexity}</div>
+                      </div>
+                    </div>
+
+                    {/* Architecture */}
                     <div>
-                      <h4 className="text-white font-semibold mb-3">Recommended Technology Stack:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {recommendations.technologyStack.map((tech, index) => (
-                          <span key={index} className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm border border-purple-500/30">
-                            {tech}
-                          </span>
+                      <h3 className="text-lg font-semibold text-white mb-3 border-l-4 border-l-cyan-500 pl-3">Architecture Overview</h3>
+                      <ul className="space-y-2">
+                        {plan.archItems.map((item: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-200">{item}</span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
 
-                    {/* Timeline & Budget */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30">
-                        <div className="text-xl font-bold text-blue-400 mb-1">{recommendations.estimatedTimeline}</div>
-                        <div className="text-gray-300">Estimated Timeline</div>
-                      </div>
-                      <div className="bg-green-500/10 rounded-lg p-4 border border-green-500/30">
-                        <div className="text-xl font-bold text-green-400 mb-1">{recommendations.budgetEstimate}</div>
-                        <div className="text-gray-300">Budget Estimate</div>
-                      </div>
+                    {/* Tech Stack */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3 border-l-4 border-l-cyan-500 pl-3">Recommended Tech Stack</h3>
+                      <ul className="space-y-2">
+                        {plan.stackItems.map((item: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Code className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-200">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
-                    {/* Risk & Approach */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-yellow-500/10 rounded-lg p-4 border border-yellow-500/30">
-                        <div className="text-xl font-bold text-yellow-400 mb-1">{recommendations.riskLevel}</div>
-                        <div className="text-gray-300">Risk Level</div>
-                      </div>
-                      <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-                        <div className="text-lg font-bold text-purple-400 mb-1">{recommendations.recommendedApproach}</div>
-                        <div className="text-gray-300">Recommended Approach</div>
-                      </div>
+                    {/* Strategy */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3 border-l-4 border-l-cyan-500 pl-3">Development Strategy</h3>
+                      <ul className="space-y-2">
+                        {plan.strategyPoints.map((item: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Zap className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-200">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
-                    {/* Email Capture */}
-                    <div className="mt-6 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/30">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Mail className="w-5 h-5 text-yellow-400" />
-                        <h4 className="text-white font-semibold">Get Your Detailed Development Guide</h4>
-                      </div>
-                      <p className="text-gray-300 mb-4">
-                        Enter your email to receive a comprehensive PDF guide with detailed technology recommendations, 
-                        implementation roadmap, and best practices for your specific project.
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Input
-                          type="email"
-                          placeholder="Enter your email address"
-                          value={surveyData.email}
-                          onChange={(e) => updateSurveyData('email', e.target.value)}
-                          className="bg-white/5 border-white/20 text-white placeholder-gray-400"
-                        />
-                        <Button
-                          onClick={handleSubmit}
-                          disabled={!surveyData.email || isLoading}
-                          className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
-                        >
-                          {isLoading ? "Sending..." : "Get Guide"}
-                        </Button>
-                      </div>
+                    {/* Download Actions */}
+                    <div className="flex justify-end items-center pt-6 border-t border-gray-700">
+                      <span className="text-sm text-gray-400 mr-4">Select &quot;Save as PDF&quot; in print dialog</span>
+                      <button
+                        onClick={downloadPDF}
+                        className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 flex items-center gap-2"
+                      >
+                        <Download className="w-5 h-5" />
+                        Download PDF
+                      </button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </main>

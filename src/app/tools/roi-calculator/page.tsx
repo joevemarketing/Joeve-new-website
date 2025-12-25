@@ -3,13 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Calculator, TrendingUp, DollarSign, Users, Clock, Mail, CheckCircle, Download } from "lucide-react";
+import { Calculator, Mail, CheckCircle, Download, Users, DollarSign, TrendingUp, Clock } from "lucide-react";
 import { ScrollReveal } from "@/components/effects/ScrollAnimations";
+import AdvancedROICalculator from "@/components/tools/AdvancedROICalculator";
 import jsPDF from 'jspdf';
 // import html2canvas from 'html2canvas';
 
@@ -298,186 +296,29 @@ export default function ROICalculator() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep">
-      <div className="container mx-auto px-4 py-8">
-        <ScrollReveal className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <Calculator className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Digital Marketing ROI Calculator</h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Calculate your potential return on investment with our AI-powered digital marketing solutions
-            </p>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-400">Step {currentStep} of {totalSteps}</span>
-              <span className="text-sm text-gray-400">{Math.round((currentStep / totalSteps) * 100)}%</span>
-            </div>
-            <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
-          </div>
-
-          {/* Survey Content */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                {currentQuestion?.icon}
-                <CardTitle className="text-xl text-white">{currentQuestion?.title}</CardTitle>
-              </div>
-              <CardDescription className="text-gray-300">
-                {currentQuestion?.subtitle}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {currentQuestion?.options ? (
-                <RadioGroup
-                  value={currentQuestion ? surveyData[currentQuestion.id as keyof SurveyData] : ""}
-                  onValueChange={(value) => currentQuestion && updateSurveyData(currentQuestion.id as keyof SurveyData, value)}
-                  className="space-y-3"
-                >
-                  {currentQuestion?.options?.map((option) => (
-                    <div key={option.value} className="flex items-center space-x-3">
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value} className="text-white cursor-pointer">
-                        {option.label}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              ) : currentQuestion ? (
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Input
-                      type={currentQuestion?.type || "text"}
-                      placeholder={currentQuestion?.placeholder}
-                      value={currentQuestion ? surveyData[currentQuestion.id as keyof SurveyData] : ""}
-                      onChange={(e) => currentQuestion && updateSurveyData(currentQuestion.id as keyof SurveyData, e.target.value)}
-                      className="bg-white/5 border-white/20 text-white placeholder-gray-400"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-400">Loading next question...</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Navigation */}
-          <div className="flex justify-between items-center mt-8">
-            <Button
-              onClick={handlePrevious}
-              disabled={currentStep === 1}
-              variant="outline"
-              className="border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white font-bold px-6 py-3 rounded-full"
-            >
-              Previous
-            </Button>
-
-            {currentStep < totalSteps && currentQuestion ? (
+    <>
+      <AdvancedROICalculator />
+      
+      {/* Keep the success modal for form submission */}
+      {isSubmitted && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <ScrollReveal className="bg-white rounded-2xl p-8 max-w-md w-full border shadow-2xl">
+            <div className="text-center">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h2>
+              <p className="text-gray-600 mb-6">
+                Your information has been received. We&apos;ll be in touch with you shortly to discuss how our AI solutions can transform your business.
+              </p>
               <Button
-                onClick={handleNext}
-                disabled={!surveyData[currentQuestion.id as keyof SurveyData]}
+                onClick={() => setIsSubmitted(false)}
                 className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
               >
-                Next
+                Close
               </Button>
-            ) : (
-              <Button
-                onClick={() => setCurrentStep(currentStep + 1)}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
-              >
-                Calculate ROI
-              </Button>
-            )}
-          </div>
-
-          {/* ROI Results Display */}
-          {calculation && currentStep > totalSteps && (
-            <ScrollReveal className="mt-8">
-              <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-white flex items-center gap-2">
-                    <TrendingUp className="w-6 h-6 text-green-400" />
-                    Your ROI Analysis
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-green-500/10 rounded-lg p-4 border border-green-500/30">
-                      <div className="text-3xl font-bold text-green-400 mb-2">{calculation.estimatedROI.toFixed(0)}%</div>
-                      <div className="text-gray-300">Estimated ROI</div>
-                    </div>
-                    <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30">
-                      <div className="text-3xl font-bold text-blue-400 mb-2">RM {calculation.monthlySavings.toLocaleString()}</div>
-                      <div className="text-gray-300">Monthly Savings</div>
-                    </div>
-                    <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-                      <div className="text-3xl font-bold text-purple-400 mb-2">{calculation.paybackPeriod}</div>
-                      <div className="text-gray-300">Months to Payback</div>
-                    </div>
-                    <div className="bg-cyan-500/10 rounded-lg p-4 border border-cyan-500/30">
-                      <div className="text-3xl font-bold text-cyan-400 mb-2">RM {calculation.annualSavings.toLocaleString()}</div>
-                      <div className="text-gray-300">Annual Savings</div>
-                    </div>
-                  </div>
-
-                  {/* Email Capture */}
-                  <div className="mt-6 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/30">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Mail className="w-5 h-5 text-yellow-400" />
-                      <h4 className="text-white font-semibold">Get Your Detailed Report</h4>
-                    </div>
-                    <p className="text-gray-300 mb-4">
-                      Enter your email to receive a comprehensive PDF report with detailed analysis, implementation roadmap, and next steps.
-                    </p>
-                    <div className="space-y-3">
-                      <p className="text-gray-300 mb-4">
-                        Get your comprehensive ROI analysis instantly or receive via email:
-                      </p>
-                      
-                      {/* Download PDF Option */}
-                      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                        <Button
-                          onClick={generatePDFReport}
-                          disabled={isLoading}
-                          className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all flex items-center gap-2"
-                        >
-                          <Download className="w-4 h-4" />
-                          {isLoading ? "Generating..." : "Download PDF Report"}
-                        </Button>
-                      </div>
-                      
-                      {/* Email Option */}
-                      <div className="border-t border-white/20 pt-4">
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          <Input
-                            type="email"
-                            placeholder="Enter your email address"
-                            value={surveyData.email}
-                            onChange={(e) => updateSurveyData('email', e.target.value)}
-                            className="bg-white/5 border-white/20 text-white placeholder-gray-400"
-                          />
-                          <Button
-                            onClick={handleSubmit}
-                            disabled={!surveyData.email || isLoading}
-                            className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transition-all"
-                          >
-                            {isLoading ? "Sending..." : "Email Report"}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </ScrollReveal>
-          )}
-        </ScrollReveal>
-      </div>
-    </main>
+            </div>
+          </ScrollReveal>
+        </div>
+      )}
+    </>
   );
 }

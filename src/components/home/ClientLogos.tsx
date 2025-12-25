@@ -28,10 +28,10 @@ export default function ClientLogos() {
         </motion.div>
 
         {/* Scrolling Marquee */}
-        <div className="relative px-4 py-8">
+        <div className="relative px-4 py-6">
 
           <motion.div
-            className="flex gap-16"
+            className="flex gap-8"
             animate={{
               x: ["0%", "-50%"],
             }}
@@ -50,14 +50,14 @@ export default function ClientLogos() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
               >
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 min-w-[160px] text-center">
-                  <div className="relative w-16 h-16 mx-auto">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 min-w-[140px] text-center">
+                  <div className="relative w-24 h-24 mx-auto">
                     <Image
                       src={client.logo}
                       alt={client.name}
                       fill
                       className="object-contain"
-                      sizes="64px"
+                      sizes="96px"
                     />
                   </div>
                 </div>

@@ -37,10 +37,14 @@ export function Header() {
         </div>
 
         <nav className="hidden lg:flex items-center gap-8">
-          {['About', 'Services', 'Portfolio', 'Contact'].map((item) => (
+          {['About', 'Services', 'Portfolio', 'ROI Calculator', 'Web App Guide', 'Contact'].map((item) => (
             <Link 
               key={item} 
-              href={`/${item.toLowerCase()}`}
+              href={
+                item === 'ROI Calculator' ? '/tools/roi-calculator' : 
+                item === 'Web App Guide' ? '/tools/web-app-guide' : 
+                `/${item.toLowerCase()}`
+              }
               className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors uppercase tracking-wide"
             >
               {item}

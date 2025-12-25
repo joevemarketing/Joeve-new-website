@@ -50,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
-        <div className="min-h-screen bg-black text-white">
+        <div className="min-h-screen">
           <Header />
           <main className="flex-1">
             <div>

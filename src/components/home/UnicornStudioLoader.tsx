@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
-    UnicornStudio?: any;
     __UNICORN_STUDIO_INIT__?: boolean;
+    UnicornStudio?: {
+      init?: () => void;
+      isInitialized?: boolean;
+    };
   }
 }
 

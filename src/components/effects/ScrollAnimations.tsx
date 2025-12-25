@@ -18,8 +18,8 @@ export function ScrollReveal({
   children, 
   direction = "up", 
   delay = 0, 
-  duration = 0.6, 
-  distance = 50,
+  duration = 0.4, 
+  distance = 20,
   as: Component = "div",
   className = ""
 }: ScrollRevealProps) {
