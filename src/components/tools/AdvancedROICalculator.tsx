@@ -116,6 +116,63 @@ export default function AdvancedROICalculator() {
           </p>
         </div>
 
+        {/* Instructions */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 mb-8 border border-white/10">
+          <h2 className="text-xl font-semibold text-white mb-4">📊 How to Use</h2>
+          <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm">
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">1. Input Your Data</h3>
+              <p>Enter your current ad spend, conversion rate, and average order value using the sliders. Use real data from your ad platforms for accurate results.</p>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">2. Set AI Expectations</h3>
+              <p>Adjust the AI Optimization Lift (5-100%). Conservative: 20-30%, Aggressive: 50-100% based on your industry and campaign type.</p>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">3. Review Results</h3>
+              <p>Compare Standard vs AI-optimized metrics. The calculator shows revenue differences, ROI improvements, and conversion lifts.</p>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">4. Make Decisions</h3>
+              <p>Use the projections to plan campaigns, justify budgets, or present ROI analysis to stakeholders.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Formula Info */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 mb-8 border border-white/10">
+          <h2 className="text-xl font-semibold text-white mb-4">🧮 Calculation Formulas</h2>
+          <div className="space-y-4 text-gray-300 text-sm">
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">Traffic & Conversions</h3>
+              <div className="bg-black/20 rounded p-3 font-mono text-xs">
+                <p><span className="text-cyan-400">Traffic</span> = Ad Spend ÷ CPC ($1.50)</p>
+                <p><span className="text-cyan-400">Conversions</span> = Traffic × (Conversion Rate ÷ 100)</p>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">Revenue & Profit</h3>
+              <div className="bg-black/20 rounded p-3 font-mono text-xs">
+                <p><span className="text-cyan-400">Revenue</span> = Conversions × Average Order Value</p>
+                <p><span className="text-cyan-400">Profit</span> = Revenue - Ad Spend</p>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">Return on Investment</h3>
+              <div className="bg-black/20 rounded p-3 font-mono text-xs">
+                <p><span className="text-cyan-400">ROI</span> = (Profit ÷ Ad Spend) × 100</p>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium text-cyan-400 mb-2">AI Enhancement</h3>
+              <div className="bg-black/20 rounded p-3 font-mono text-xs">
+                <p><span className="text-cyan-400">AI Conversion Rate</span> = Current Rate × (1 + Optimization % ÷ 100)</p>
+                <p><span className="text-cyan-400">AI Revenue</span> = Traffic × AI Conversion Rate × Order Value</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
           <div className="lg:col-span-1">
