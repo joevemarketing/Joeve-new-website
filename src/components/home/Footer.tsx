@@ -41,8 +41,7 @@ const resources = [
 
 const company = [
   { name: "About Us", href: "/about" },
-  { name: "Join as Freelancer", href: "/join-freelancer" },
-  { name: "Part-time Influencer", href: "/join-influencer" },
+  { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },
   { name: "Privacy Policy", href: "/privacy" },
   { name: "Terms of Service", href: "/terms" }
