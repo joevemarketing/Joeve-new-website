@@ -104,7 +104,7 @@ export default function AdvancedROICalculator() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep pt-28 px-4">
       <div className="container mx-auto max-w-7xl">
         {/* Page Header */}
         <header className="text-center mb-12">
