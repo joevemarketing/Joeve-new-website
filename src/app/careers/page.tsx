@@ -12,7 +12,7 @@ const positions = [
     type: "Remote Freelance",
     location: "Malaysia",
     duration: "Part-time / Project-based",
-    description: "We're looking for talented AI developers to help build cutting-edge solutions for Malaysian businesses. Work on exciting AI chatbots, automation tools, and web applications.",
+    description: "We&apos;re looking for talented AI developers to help build cutting-edge solutions for Malaysian businesses. Work on exciting AI chatbots, automation tools, and web applications.",
     requirements: [
       "Experience with React, Next.js, and TypeScript",
       "Knowledge of AI/ML frameworks (TensorFlow, PyTorch)",
@@ -81,7 +81,7 @@ export default function CareersPage() {
             Join Our <span className="text-cyan-400">Freelance Team</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-            We're looking for talented Malaysian freelancers and influencers to join our growing team. 
+            We&apos;re looking for talented Malaysian freelancers and influencers to join our growing team. 
             Work on exciting projects with flexible schedules and competitive compensation.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
@@ -193,7 +193,7 @@ export default function CareersPage() {
                     {/* Contact Button */}
                     <div className="mt-6 p-4 bg-slate-700/50 rounded-lg border border-white/10">
                       <p className="text-sm text-gray-400 mb-3">
-                        Interested? Send us your portfolio and we'll get in touch!
+                        Interested? Send us your portfolio and we&apos;ll get in touch!
                       </p>
                       <Button className="w-full" asChild>
                         <Link href={`mailto:${position.contactMethod}?subject=Application for ${encodeURIComponent(position.title)}`}>
