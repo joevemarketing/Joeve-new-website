@@ -59,11 +59,11 @@ export default function CareersPage() {
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
+      <div className="bg-background/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-0 font-medium">
+          <Link href="/" className="inline-flex items-center text-gray-300 hover:text-white mb-0 font-medium">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
           </Link>
         </div>
@@ -77,23 +77,23 @@ export default function CareersPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Join Our <span className="text-blue-600">Freelance Team</span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Join Our <span className="text-cyan-400">Freelance Team</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             We're looking for talented Malaysian freelancers and influencers to join our growing team. 
             Work on exciting projects with flexible schedules and competitive compensation.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <div className="flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+            <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30">
               <Users className="w-4 h-4" />
               Open Positions: 2
             </div>
-            <div className="flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+            <div className="flex items-center gap-2 bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30">
               <MapPin className="w-4 h-4" />
               Malaysia Only
             </div>
-            <div className="flex items-center gap-2 bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+            <div className="flex items-center gap-2 bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30">
               <Clock className="w-4 h-4" />
               Flexible Hours
             </div>
@@ -108,10 +108,10 @@ export default function CareersPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow border border-white/10"
             >
               {/* Position Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+              <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-6">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-xl font-bold">{position.title}</h3>
                   <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
@@ -132,7 +132,7 @@ export default function CareersPage() {
 
               {/* Position Details */}
               <div className="p-6">
-                <p className="text-gray-700 mb-6 leading-relaxed">
+                <p className="text-gray-300 mb-6 leading-relaxed">
                   {position.description}
                 </p>
 
@@ -154,19 +154,19 @@ export default function CareersPage() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     transition={{ duration: 0.3 }}
-                    className="border-t pt-4"
+                    className="border-t border-white/10 pt-4"
                   >
                     <div className="grid md:grid-cols-2 gap-6">
                       {/* Requirements */}
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                           <Briefcase className="w-4 h-4" />
                           Requirements
                         </h4>
                         <ul className="space-y-2">
                           {position.requirements.map((req, reqIndex) => (
-                            <li key={reqIndex} className="flex items-start gap-2 text-sm text-gray-700">
-                              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                            <li key={reqIndex} className="flex items-start gap-2 text-sm text-gray-300">
+                              <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full mt-1.5 flex-shrink-0"></span>
                               {req}
                             </li>
                           ))}
@@ -175,13 +175,13 @@ export default function CareersPage() {
 
                       {/* Benefits */}
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                           <Users className="w-4 h-4" />
                           What You Get
                         </h4>
                         <ul className="space-y-2">
                           {position.benefits.map((benefit, benIndex) => (
-                            <li key={benIndex} className="flex items-start gap-2 text-sm text-gray-700">
+                            <li key={benIndex} className="flex items-start gap-2 text-sm text-gray-300">
                               <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></span>
                               {benefit}
                             </li>
@@ -191,8 +191,8 @@ export default function CareersPage() {
                     </div>
 
                     {/* Contact Button */}
-                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-3">
+                    <div className="mt-6 p-4 bg-slate-700/50 rounded-lg border border-white/10">
+                      <p className="text-sm text-gray-400 mb-3">
                         Interested? Send us your portfolio and we'll get in touch!
                       </p>
                       <Button className="w-full" asChild>
@@ -216,26 +216,26 @@ export default function CareersPage() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-16 text-center max-w-4xl mx-auto"
         >
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/10">
+            <h3 className="text-2xl font-bold text-white mb-4">
               Why Work With JOeve?
             </h3>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div>
-                <h4 className="font-semibold text-blue-600 mb-2">Flexible Work</h4>
-                <p className="text-gray-700 text-sm">
+                <h4 className="font-semibold text-cyan-400 mb-2">Flexible Work</h4>
+                <p className="text-gray-300 text-sm">
                   Choose your projects and work hours that fit your lifestyle. Perfect for students, parents, or anyone seeking work-life balance.
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-blue-600 mb-2">Skill Development</h4>
-                <p className="text-gray-700 text-sm">
+                <h4 className="font-semibold text-cyan-400 mb-2">Skill Development</h4>
+                <p className="text-gray-300 text-sm">
                   Gain hands-on experience with cutting-edge AI and digital technologies. Build your portfolio while earning.
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-blue-600 mb-2">Community</h4>
-                <p className="text-gray-700 text-sm">
+                <h4 className="font-semibold text-cyan-400 mb-2">Community</h4>
+                <p className="text-gray-300 text-sm">
                   Join a growing network of Malaysian freelancers and creators. Share knowledge, find opportunities, and grow together.
                 </p>
               </div>
