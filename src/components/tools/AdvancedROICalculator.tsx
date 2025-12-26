@@ -106,15 +106,22 @@ export default function AdvancedROICalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-joeve-blue-deep via-joeve-blue-dark to-joeve-blue-deep py-8 px-4">
       <div className="container mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Digital Marketing ROI Calculator
-          </h1>
+        {/* Page Header */}
+        <header className="text-center mb-12">
+          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-white/20">
+            <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">
+              Digital Marketing ROI Calculator
+            </h1>
+          </div>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
             Estimate the impact of AI-powered optimization on your ad spend, conversion rates, and overall revenue.
           </p>
-        </div>
+        </header>
 
         {/* Instructions */}
         <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 mb-8 border border-white/10">
