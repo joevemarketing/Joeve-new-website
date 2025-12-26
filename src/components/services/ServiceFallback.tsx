@@ -168,9 +168,12 @@ export function ServiceFallback({ slug }: { slug: string }) {
       { question: "Can you add voiceovers?", answer: "Yes, we offer AI voiceovers in multiple languages and accents. We can also work with professional voice actors for premium projects." }
     ],
     "landing-pages": [
-      { question: "Do you handle the design and development?", answer: "Yes, we provide end-to-end landing page services including strategy, design, development, and optimization. We also offer A/B testing and performance monitoring." },
-      { question: "How do you optimize for conversions?", answer: "We use data-driven approaches including heatmap analysis, A/B testing, user behavior tracking, and industry best practices to maximize conversion rates." },
-      { question: "Can you integrate with my existing tools?", answer: "Absolutely! We can integrate with your CRM, email marketing, analytics, and other marketing tools to ensure seamless lead capture and tracking." }
+      { question: "What makes a great landing page?", answer: "A great landing page has a clear message, compelling visuals, strong call-to-action, and loads quickly. It should be mobile-friendly and guide visitors toward your business goals." },
+      { question: "How long does it take to build?", answer: "Most landing pages can be designed and developed in 1-2 weeks for standard projects. Complex pages with custom features may take 3-4 weeks. We'll provide a detailed timeline after discussing your requirements." },
+      { question: "Can I update the content myself?", answer: "Yes! We build landing pages on user-friendly platforms that allow you to update text, images, and content without technical knowledge. We also provide training and documentation." },
+      { question: "Do you work with different industries?", answer: "Absolutely! We create landing pages for various industries including retail, services, education, healthcare, finance, and more. Each industry gets tailored design and messaging." },
+      { question: "What about mobile responsiveness?", answer: "All our landing pages are fully responsive and optimized for mobile devices. We ensure your page looks great and functions perfectly on phones, tablets, and desktop computers." },
+      { question: "How do you measure success?", answer: "We track key metrics like visitor traffic, conversion rates, bounce rates, and time on page. You'll receive regular reports showing how your landing page is performing against your goals." }
     ],
     "sem": [
       { question: "Which ad platforms do you manage?", answer: "We specialize in Google Ads, Bing Ads, and social media advertising. We can manage search, display, shopping, and video campaigns across these platforms." },
