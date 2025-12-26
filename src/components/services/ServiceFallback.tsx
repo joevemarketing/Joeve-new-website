@@ -207,7 +207,7 @@ export function ServiceFallback({ slug }: { slug: string }) {
   }
 
   if (slug === "landing-pages") {
-    return <LandingPagesLanding title={title} description={description} image={image} features={currentFeatures} benefits={currentBenefits} faqs={currentFaqs} mockupImage="/images/landing-pages-mockup.jpg" />;
+    return <LandingPagesLanding title={title} description={description} image={image} features={currentFeatures} benefits={currentBenefits} faqs={currentFaqs} mockupImage="/landing-pages-mockup.svg" />;
   }
 
   if (slug === "sem") {

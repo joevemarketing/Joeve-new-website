@@ -1,0 +1,78 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bgGradient)"/>
+  
+  <!-- Define gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0F9FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F2FE;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Transparent Header Bar -->
+  <rect x="50" y="50" width="1100" height="80" rx="12" fill="none" />
+  <rect x="70" y="70" width="32" height="32" rx="6" fill="url(#headerGradient)"/>
+  <text x="120" y="92" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF">ConversionPro</text>
+  
+  <!-- Navigation -->
+  <text x="900" y="92" font-family="Arial, sans-serif" font-size="16" fill="#FFFFFF">Features</text>
+  <text x="1000" y="92" font-family="Arial, sans-serif" font-size="16" fill="#FFFFFF">Pricing</text>
+  <text x="1080" y="92" font-family="Arial, sans-serif" font-size="16" fill="#FFFFFF">About</text>
+  
+  <!-- Hero Section -->
+  <rect x="50" y="160" width="1100" height="280" rx="16" fill="url(#headerGradient)"/>
+  
+  <!-- Floating elements in hero -->
+  <circle cx="200" cy="250" r="4" fill="white" opacity="0.3"/>
+  <circle cx="1000" cy="300" r="3" fill="white" opacity="0.2"/>
+  <circle cx="950" cy="200" r="2" fill="white" opacity="0.4"/>
+  
+  <!-- Hero Text -->
+  <text x="600" y="240" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">Transform Your Business Today</text>
+  <text x="600" y="290" font-family="Arial, sans-serif" font-size="20" fill="#E0F2FE" text-anchor="middle">Get 247% higher conversion rates with proven strategies</text>
+  
+  <!-- CTA Buttons -->
+  <rect x="450" y="320" width="140" height="45" rx="8" fill="white"/>
+  <text x="520" y="347" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#3B82F6" text-anchor="middle">Start Free Trial</text>
+  
+  <rect x="610" y="320" width="120" height="45" rx="8" fill="none" stroke="white" stroke-width="2"/>
+  <text x="670" y="347" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="white" text-anchor="middle">Watch Demo</text>
+  
+  <!-- Features Cards -->
+  <rect x="50" y="470" width="340" height="160" rx="12" fill="white" filter="url(#shadow)"/>
+  <circle cx="90" cy="520" r="20" fill="#10B981" opacity="0.1"/>
+  <path d="M82 520 L98 520 M90 512 L90 528" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  <text x="220" y="510" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1F2937">A/B Testing</text>
+  <text x="220" y="535" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">Test different versions to find</text>
+  <text x="220" y="555" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">what converts best</text>
+  
+  <rect x="430" y="470" width="340" height="160" rx="12" fill="white" filter="url(#shadow)"/>
+  <circle cx="470" cy="520" r="20" fill="#3B82F6" opacity="0.1"/>
+  <path d="M462 520 L478 520 M470 512 L470 528" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
+  <text x="600" y="510" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1F2937">Analytics</text>
+  <text x="600" y="535" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">Track performance with detailed</text>
+  <text x="600" y="555" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">conversion insights</text>
+  
+  <rect x="810" y="470" width="340" height="160" rx="12" fill="white" filter="url(#shadow)"/>
+  <circle cx="850" cy="520" r="20" fill="#8B5CF6" opacity="0.1"/>
+  <path d="M842 520 L858 520 M850 512 L850 528" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/>
+  <text x="980" y="510" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1F2937">Mobile First</text>
+  <text x="980" y="535" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">Optimized for mobile</text>
+  <text x="980" y="555" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">with responsive design</text>
+  
+  <!-- Social Proof -->
+  <rect x="50" y="650" width="1100" height="25" fill="#F9FAFB"/>
+  <text x="600" y="667" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">Trusted by 500+ Businesses • TechCorp • DataFlow • CloudBase • NetScale</text>
+  
+  <!-- Shadow filter -->
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+</svg>

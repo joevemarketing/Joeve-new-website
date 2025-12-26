@@ -78,14 +78,14 @@ export const services: Service[] = [
     features: ["Campaign Optimization", "Keyword Research", "Performance Tracking", "ROI Analysis"]
   },
   {
-    id: "digital-bizcard",
-    title: "Jo Bizcard",
-    description: "Interactive digital business cards with NFC technology and analytics tracking.",
-    icon: "CreditCard",
-    gradient: "from-yellow-500 to-orange-500",
-    image: "/images/landing-bizcard-hero.jpg",
-    href: "/services/jo-bizcard",
-    features: ["NFC Technology", "Analytics Tracking", "Custom Design", "Contact Management"]
+    id: "landing-pages",
+    title: "Landing Pages",
+    description: "High-converting landing pages optimized for lead generation and marketing campaigns.",
+    icon: "Code",
+    gradient: "from-cyan-500 to-blue-500",
+    image: "/images/landing-lp-hero.jpg",
+    href: "/services/landing-pages",
+    features: ["Lead Generation", "A/B Testing", "Mobile Optimization", "Analytics Integration"]
   }
 ];
 
