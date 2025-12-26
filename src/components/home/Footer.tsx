@@ -41,8 +41,8 @@ const resources = [
 
 const company = [
   { name: "About Us", href: "/about" },
-  { name: "Our Team", href: "/about#team" },
-  { name: "Careers", href: "/careers" },
+  { name: "Join as Freelancer", href: "/join-freelancer" },
+  { name: "Part-time Influencer", href: "/join-influencer" },
   { name: "Contact", href: "/contact" },
   { name: "Privacy Policy", href: "/privacy" },
   { name: "Terms of Service", href: "/terms" }
@@ -123,15 +123,15 @@ export default function Footer() {
                 </div>
               </Link>
               <p className="text-white/80 mb-6 max-w-md">
-                Transforming Malaysian businesses with cutting-edge AI solutions. 
-                We deliver measurable results through intelligent automation and digital innovation.
+                Empowering Malaysian freelancers and influencers with cutting-edge AI solutions. 
+                We help you scale your career and business through intelligent automation and digital innovation.
               </p>
               
               {/* Contact Info */}
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-white/80">
                   <Mail className="w-4 h-4 text-cyan-400" />
-                  <span>hello@joevesmartsolutions.com</span>
+                  <span>freelance@joevesmartsolutions.com</span>
                 </div>
                 <div className="flex items-center gap-3 text-white/80">
                   <Phone className="w-4 h-4 text-cyan-400" />
@@ -243,7 +243,7 @@ export default function Footer() {
             <div className="flex gap-6 text-white/60 text-sm">
               <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
-              <Link href="/cookies" className="hover:text-cyan-400 transition-colors">Cookie Policy</Link>
+              <span className="text-white/40">Malaysia Only</span>
             </div>
           </div>
         </div>
