@@ -27,7 +27,7 @@ const positions = [
       "Build your portfolio with real client work",
       "Opportunity for long-term collaboration"
     ],
-    contactMethod: "freelance@joevesmartsolutions.com"
+    contactMethod: "joevesmartsolutions@gmail.com"
   },
   {
     title: "Part-time Social Media Influencer",
@@ -51,7 +51,7 @@ const positions = [
       "Networking opportunities with other creators",
       "Potential for long-term brand partnerships"
     ],
-    contactMethod: "influencer@joevesmartsolutions.com"
+    contactMethod: "joevesmartsolutions@gmail.com"
   }
 ];
 
